@@ -1,2 +1,3 @@
 /node_modules/
-/appOld.js/
+/.vscode/
+appOld.js
