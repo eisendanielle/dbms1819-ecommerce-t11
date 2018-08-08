@@ -1,0 +1,32 @@
+<div class="container create_brands">
+    <div class="row">
+        <div class="col-12">
+            <h3>Create Brand</h3>
+
+            <form method="POST" action="/brands">
+                <div class="controls">
+                    <div class="form-group">
+                        <label class="control-label" for="brand_name">Brand Name *</label>
+                        <div>
+                            <input id="brand_name" name="brand_name" type="text" placeholder="Honda" class="form-control" required="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="brand_description">Brand Description *</label>
+                        <div>
+                            <input id="brand_description" name="brand_description" type="text" placeholder="The world's largest motorcycle manufacturer" class="form-control" required="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg" title="Submit category form">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
