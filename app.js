@@ -42,7 +42,7 @@ app.use(bodyParser.json());
 
 
 
-app.get('/', function (req, res) { 
+app.get('/', function (req, res) {
 	client.query('SELECT * FROM products ORDER BY products.id', (req, data) => {
 		var list = [];
 		for (var i = 0; i < data.rows.length; i++) {
@@ -92,7 +92,7 @@ app.get('/categories/create', (req, res) => {
 
 
 // PRODUCTS BRAND
-app.post('/brands', function (req, res) {  
+app.post('/brands', function (req, res) {
 	var values = [];
 	values = [req.body.brand_name, req.body.brand_description];
 	console.log(req.body);
@@ -108,7 +108,7 @@ app.post('/brands', function (req, res) {
 	res.redirect('/brands');
 });
 
-app.get('/brands', (req, res) => { 
+app.get('/brands', (req, res) => {
 	client.query('SELECT * FROM brands', (req, data) => {
 		var list = [];
 		for (var i = 1; i < data.rows.length + 1; i++) {
@@ -124,107 +124,6 @@ app.get('/brands/create', (req, res) => {
 	res.render('create_brands');
 });
 
-
-
-app.get('/product/create', (req, res) => {	//CREATE PRODUCT html
-	client.query('SELECT * FROM products_category', (req, data) => {
-		var list = [];
-		for (var i = 1; i < data.rows.length + 1; i++) {
-			list.push(data.rows[i - 1]);
-		}
-		client.query('SELECT * FROM brands', (req, data) => {
-			var list2 = [];
-			for (var i = 1; i < data.rows.length + 1; i++) {
-				list2.push(data.rows[i - 1]);
-			}
-			res.render('product_create', {
-				data: list,
-				data2: list2
-			});
-		});
-	});
-});
-
-app.get('/products/:id', (req, res) => {
-	var id = req.params.id;
-	client.query('SELECT * FROM products_m1', (req, data) => {
-		var list = [];
-		for (var i = 0; i < data.rows.length + 1; i++) {
-			if (i == id) {
-				list.push(data.rows[i - 1]);
-			}
-		}
-		res.render('products', {
-			data: list
-		});
-	});
-});
-
-app.get('/edit', (req, res) => {
-	var id = req.params.id;
-	res.render('edit');
-});
-
-app.post('/products/:id/send', function (req, res) {
-	console.log(req.body);
-	var id = req.params.id;
-	const output = `
-		<p>You have a new contact request</p>
-		<h3>Contact Details</h3>
-		<ul>
-			<li>Customer Name: ${req.body.name}</li>
-			<li>Phone: ${req.body.phone}</li>
-			<li>Email: ${req.body.email}</li>
-			<li>Product ID: ${req.body.productid}</li>
-			<li>Quantity: ${req.body.quantity}</li>
-		</ul>
-	`;
-
-	//nodemailer
-	let transporter = nodemailer.createTransport({
-		host: 'smtp.mail.yahoo.com',
-		port: 465,
-		secure: true,
-		auth: {
-			user: 'iemaniamailer@yahoo.com',
-			pass: 'custominearmonitor'
-            /*
-            user: 'iemaniamailer@google.com', 
-            pass: 'custominearmonitor' 
-        host: 'smtp.mail.yahoo.com'
-            */
-		}
-	});
-
-	let mailOptions = {
-		from: '"IEMania Mailer" <iemaniamailer@yahoo.com>',
-		to: 'jdvista96@gmail.com, killerbats1com@gmail.com, drobscortz@gmail.com',
-		subject: 'IEMania Contact Request',
-		//text: req.body.name,
-		html: output
-	};
-
-	transporter.sendMail(mailOptions, (error, info) => {
-		if (error) {
-			return console.log(error);
-		}
-		console.log('Message sent: %s', info.messageId);
-		console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-
-		client.query('SELECT * FROM products_m1', (req, data) => {
-			var list = [];
-			for (var i = 0; i < data.rows.length + 1; i++) {
-				if (i == id) {
-					list.push(data.rows[i - 1]);
-				}
-			}
-			res.render('products', {
-				data: list,
-				msg: '---Email has been sent---'
-			});
-		});
-	});
-});
 
 app.get('/team/11/Eisen', function (req, res) {
 	res.render('member', {
