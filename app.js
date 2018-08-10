@@ -6,22 +6,22 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const PORT = process.env.PORT || 5000
 
-const client = new Client({
-	database: 'storedb',
-	user: 'postgres',
-	password: '0910',
-	host: 'localhost',
-	port: 5432
-});
-
 // const client = new Client({
-// 	database: 'deua2se0ond0cu',
-// 	user: 'xeolsxmpkxgcal',
-// 	password: '17192200bc821debbff0956f29efeff32940349c10d9e51dd3d50de05283a55e',
-// 	host: 'ec2-54-225-76-201.compute-1.amazonaws.com',
-// 	port: 5432,
-// 	ssl: true
+// 	database: 'storedb',
+// 	user: 'postgres',
+// 	password: '0910',
+// 	host: 'localhost',
+// 	port: 5432
 // });
+
+const client = new Client({
+	database: 'deua2se0ond0cu',
+	user: 'xeolsxmpkxgcal',
+	password: '17192200bc821debbff0956f29efeff32940349c10d9e51dd3d50de05283a55e',
+	host: 'ec2-54-225-76-201.compute-1.amazonaws.com',
+	port: 5432,
+	ssl: true
+});
 
 client.connect()
 	.then(function () {
