@@ -1,4 +1,4 @@
-<div class="container create_brands">
+<div class="container jumbotron create_brands">
     <div class="row">
         <div class="col-12">
             <h3>Create Brand</h3>
@@ -14,13 +14,14 @@
                     <div class="form-group">
                         <label class="control-label" for="brand_description">Brand Description *</label>
                         <div>
-                            <input id="brand_description" name="brand_description" type="text" placeholder="The world's largest motorcycle manufacturer" class="form-control" required="">
+                            <input id="brand_description" name="brand_description" type="text" placeholder="The world's largest motorcycle manufacturer"
+                                class="form-control" required="">
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group submit">
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary btn-lg" title="Submit category form">
+                            <button type="submit" class="btn submitButton" title="Submit">
                                 Submit
                             </button>
                         </div>
@@ -30,3 +31,30 @@
         </div>
     </div>
 </div>
+
+<style>
+    .create_brands {
+        padding-bottom: 79px;
+    }
+    .submit {
+        padding-top: 40px;
+        position: relative;
+        max-width: 100%;
+        text-align: end;
+    }
+
+    .submitButton:hover {
+        transition: all 0.4s ease-in-out;
+        box-shadow: 0 5px 10px rgba(76, 102, 119);
+    }
+
+    .submitButton {
+        background: transparent;
+        border: 2px solid rgb(61, 79, 93);
+        color: rgb(61, 79, 93);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-size: 85%;
+        list-style: none;
+    }
+</style>

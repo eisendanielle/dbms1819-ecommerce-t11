@@ -1,20 +1,19 @@
-<div class="container create_categories">
+<div class="container jumbotron create_categories">
     <div class="row">
         <div class="col-12">
             <h3>Create Category</h3>
-
-            <form method="POST" action="/categories">
+            <form method="POST" action="/categories" class="">
                 <div class="controls">
                     <div class="form-group">
                         <label class="control-label" for="category_name">Category Name *</label>
                         <div>
-                            <input id="category_name" name="category_name" type="text" placeholder="Automatic" class="form-control" required="">
+                            <input id="category_name" name="category_name" type="text" placeholder="Sports-Manual" class="form-control" required="">
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group submit">
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary btn-lg" title="Submit category form">
+                            <button type="submit" class="btn submitButton" title="Submit">
                                 Submit
                             </button>
                         </div>
@@ -24,3 +23,30 @@
         </div>
     </div>
 </div>
+
+<style>
+    .create_categories {
+        padding-bottom: 165px;
+    }
+    .submit {
+        padding-top: 40px;
+        position: relative;
+        max-width: 100%;
+        text-align: end;
+    }
+
+    .submitButton:hover {
+        transition: all 0.4s ease-in-out;
+        box-shadow: 0 5px 10px rgba(76, 102, 119);
+    }
+
+    .submitButton {
+        background: transparent;
+        border: 2px solid rgb(61, 79, 93);
+        color: rgb(61, 79, 93);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-size: 85%;
+        list-style: none;
+    }
+</style>

@@ -50,9 +50,95 @@ app.get('/', function (req, res) {
 		}
 		res.render('home', {
 			data: list,
-			title: 'Top Products'
+			title: 'Our Products'
 		});
 	});
+});
+
+app.get('/products/:id', (req, res) => {
+	var id = req.params.id;
+	client.query('SELECT products.id, products.product_name, products.product_description, products.tagline, products.price, products.warranty, products.pic, products.category_id, products_category.category_name, products.brand_id, brands.brand_name FROM products INNER JOIN products_category ON products.category_id = products_category.id INNER JOIN brands ON products.brand_id = brands.id ORDER BY products.id', (req, data) => {
+		var list = [];
+		for (var i = 0; i < data.rows.length + 1; i++) {
+			if (i == id) {
+				list.push(data.rows[i - 1]);
+			}
+		}
+		res.render('products', {
+			data: list
+		});
+	});
+});
+
+
+app.get('/product/create', (req, res) => {
+	client.query('SELECT * FROM products_category', (req, data) => {
+		var list = [];
+		for (var i = 1; i < data.rows.length + 1; i++) {
+			list.push(data.rows[i - 1]);
+		}
+		client.query('SELECT * FROM brands', (req, data) => {
+			var list2 = [];
+			for (var i = 1; i < data.rows.length + 1; i++) {
+				list2.push(data.rows[i - 1]);
+			}
+			res.render('create_product', {
+				data: list,
+				data2: list2
+			});
+		});
+	});
+});
+
+app.post('/', function (req, res) {
+	var values = [];
+	values = [req.body.product_name, req.body.product_description, req.body.tagline, req.body.price, req.body.warranty, req.body.pic, req.body.category_id, req.body.brand_id];
+	client.query("INSERT INTO products(product_name, product_description, tagline, price, warranty, pic, category_id, brand_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8)", values, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+		}
+		else {
+			console.log(res.rows[0])
+		}
+	});
+	res.redirect('/');
+});
+
+
+app.get('/product/update/:id', (req, res) => {
+	var id = req.params.id;
+	client.query('SELECT products.id, products.product_name, products.product_description, products.tagline, products.price, products.warranty, products.pic, products.category_id, products_category.category_name, products.brand_id, brands.brand_name FROM products INNER JOIN products_category ON products.category_id = products_category.id INNER JOIN brands ON products.brand_id = brands.id ORDER BY products.id', (req, data) => {
+		var list = [];
+		for (var i = 1; i < data.rows.length + 1; i++) {
+			if (i == id) {
+				list.push(data.rows[i - 1]);
+			}
+		}
+		client.query('SELECT * FROM products_category', (req, data) => {
+			var list2 = [];
+			for (var i = 1; i < data.rows.length + 1; i++) {
+				list2.push(data.rows[i - 1]);
+			}
+			client.query('SELECT * FROM brands', (req, data) => {
+				var list3 = [];
+				for (var i = 1; i < data.rows.length + 1; i++) {
+					list3.push(data.rows[i - 1]);
+				}
+				res.render('update_product', {
+					products: list,
+					products_category: list2,
+					brands: list3
+				});
+			});
+		});
+	});
+});
+
+app.post('/products/:id', function (req, res) {
+	console.log(req.body);
+	var id = req.params.id;
+	client.query("UPDATE products SET product_name = '" + req.body.product_name + "', product_description = '" + req.body.product_description + "', tagline = '" + req.body.tagline + "', price = '" + req.body.price + "', warranty = '" + req.body.warranty + "', pic = '" + req.body.pic + "', category_id = '" + req.body.category_id + "', brand_id = '" + req.body.brand_id + "' WHERE id = '" + req.body.id + "' ");
+	res.redirect('/products/' + id);
 });
 
 
@@ -86,10 +172,9 @@ app.get('/categories', (req, res) => {
 	});
 });
 
-app.get('/categories/create', (req, res) => {
+app.get('/category/create', (req, res) => {
 	res.render('create_categories');
 });
-
 
 // PRODUCTS BRAND
 app.post('/brands', function (req, res) {
@@ -120,7 +205,7 @@ app.get('/brands', (req, res) => {
 	});
 });
 
-app.get('/brands/create', (req, res) => {
+app.get('/brand/create', (req, res) => {
 	res.render('create_brands');
 });
 
@@ -148,5 +233,4 @@ app.get('/team/11/Duanne', function (req, res) {
 app.listen(3000, function () {
 	console.log('Server started at port 3000');
 });
-
 app.listen(PORT);

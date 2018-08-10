@@ -11,20 +11,30 @@
 </head>
 
 <header class="container-fluid header">
-    <div class="row" style="border-bottom: 1px solid grey;">
-        <div class="col-6">
-            <h2 class="title">TEAM 11</h2>
-            <h5 class="tagline">Fiedad Wheels</h5>
+    <div class="row topBar" style="padding-bottom: 35px">
+        <div class="col-7">
+            {{!--
+            <h2 class="title">TEAM 11</h2> --}}
+            <h4 class="tagline">Fiedad Wheels</h4>
         </div>
 
-        <div class="col-6" style="padding-bottom: 15px;">
-            <div class="nav">
-                <div class="nav-list buttons">
-                    <a class="btn button" href="/">Home</a>
+        <div class="col-5">
+            <div class="nav buttons">
+                <div class="nav-list">
+                    <a class="btn button" href="/">Home / Products</a>
 
                     <a class="btn button" href="/categories">Categories</a>
 
                     <a class="btn button" href="/brands">Brands</a>
+
+                    <div class="dropdown">
+                        <button class="btn dropbtn button">Members</button>
+                        <div class="dropdown-content">
+                            <a href="/team/11/Eisen">Eisen</a>
+                            <a href="/team/11/Duanne">Duanne</a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -44,8 +54,31 @@
 
 
 <style type="text/css">
+    * {
+        margin: 0;
+    }
+
     .container-fluid {
         margin-left: -5px;
+        margin-bottom: -32px;
+    }
+
+    .container-fluid:after {
+        content: "";
+        display: block;
+        padding-top: 35px;
+    }
+
+    @media(min-width: 768px) {
+        .topBar {
+            border-bottom: 1px solid grey;
+        }
+    }
+
+    @media(min-width: 768px) {
+        .tagline {
+            font-size: 175%;
+        }
     }
 
     .header {
@@ -62,7 +95,7 @@
     .tagline {
         color: rgb(61, 79, 93);
         padding-left: 55px;
-        padding-top: -10px;
+        padding-top: 10px;
         font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         font-style: italic;
     }
@@ -78,9 +111,9 @@
         background-color: rgb(81, 99, 113);
         bottom: 0px;
         color: #dedede;
-        position: absolute;
         width: 100%;
-        display: inline-block;
+        margin-bottom: 0px;
+        position: relative
     }
 
     .fbLink {
@@ -91,8 +124,17 @@
     /* Buttons */
 
     .buttons {
-        padding-top: 40px;
-        padding-left: 450px;
+        padding-top: 30px;
+        position: relative;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        max-width: 100%;
+    }
+
+    .button {
+        margin-top: 2px;
     }
 
     .button:hover {
@@ -108,6 +150,50 @@
         text-transform: uppercase;
         font-size: 85%;
         list-style: none;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        transition: all 0.4s ease-in-out;
+        box-shadow: 0 5px 10px rgba(76, 102, 119);
+    }
+
+    .dropbtn {
+        background: transparent;
+        color: rgb(61, 79, 93);
+        font-size: 85%;
+        text-transform: uppercase;
+        border: 2px solid rgb(61, 79, 93);
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background: transparent;
+        min-width: 60px;
+        box-shadow: 0px 8px 16px 0px rgba(76, 102, 119, 0.2);
+        z-index: 1;
+        padding-top: 1px;
+    }
+
+    .dropdown-content a {
+        color: rgb(61, 79, 93);
+        text-decoration: none;
+        display: block;
+        padding: 12px 12px;
+    }
+
+    .dropdown-content a:hover {
+        transition: all 0.4s ease-in-out;
+        box-shadow: 0 5px 10px rgba(76, 102, 119);
     }
 </style>
 

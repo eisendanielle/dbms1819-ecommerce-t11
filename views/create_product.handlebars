@@ -1,0 +1,91 @@
+<div class="container jumbotron create_product">
+    <h3>Create Product</h3>
+
+    <form method="POST" action="/">
+        <div class="controls">
+
+            <div class="form-group">
+                <label class="control-label" for="product_name">Product Name *</label>
+                <div>
+                    <input id="product_name" name="product_name" type="text" placeholder="Honda CBR500R" class="form-control" required="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="product_description">Product Description *</label>
+                <div>
+                    <input id="product_description" name="product_description" type="text" placeholder="471cc Displacement Sport Bike" class="form-control"
+                        required="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="tagline">Tagline *</label>
+                <div>
+                    <input id="tagline" name="tagline" type="text" placeholder="Displays sheer power in a glorified body." class="form-control"
+                        required="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="price">Price *</label>
+                <div>
+                    <input id="price" name="price" type="number" placeholder="379000" class="form-control" required="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="warranty">Warranty (year)*</label>
+                <div>
+                    <input id="warranty" name="warranty" type="number" placeholder="3" class="form-control" required="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="pic">Picture link *</label>
+                <div>
+                    <input id="pic" name="pic" type="text" placeholder="*Insert picture link*" class="form-control" required="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="category_id">Product Category *</label>
+                <div class="text-center">
+                    <select name="category_id" class="form-control" required="">
+                        <option value="">Choose one..</option>
+                        {{#each data}}
+                        <option value="{{this.id}}">{{this.category_name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="brand_id">Brand *</label>
+                <div class="text-center">
+                    <select name="brand_id" class="form-control" required="">
+                        <option value=''>Choose one</option>
+                        {{#each data2}}
+                        <option value='{{this.id}}'>{{this.brand_name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-md" title="Submit product">
+                        Submit
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<style>
+    .footer {
+        position: inherit;
+    }
+</style>
