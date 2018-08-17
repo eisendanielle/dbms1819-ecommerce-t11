@@ -6,22 +6,22 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const PORT = process.env.PORT || 5000
 
-// const client = new Client({
-// 	database: 'storedb',
-// 	user: 'postgres',
-// 	password: '0910',
-// 	host: 'localhost',
-// 	port: 5432
-// });
-
 const client = new Client({
-	database: 'deua2se0ond0cu',
-	user: 'xeolsxmpkxgcal',
-	password: '17192200bc821debbff0956f29efeff32940349c10d9e51dd3d50de05283a55e',
-	host: 'ec2-54-225-76-201.compute-1.amazonaws.com',
-	port: 5432,
-	ssl: true
+	database: 'storedb',
+	user: 'postgres',
+	password: '0910',
+	host: 'localhost',
+	port: 5432
 });
+
+// const client = new Client({
+// 	database: 'deua2se0ond0cu',
+// 	user: 'xeolsxmpkxgcal',
+// 	password: '17192200bc821debbff0956f29efeff32940349c10d9e51dd3d50de05283a55e',
+// 	host: 'ec2-54-225-76-201.compute-1.amazonaws.com',
+// 	port: 5432,
+// 	ssl: true
+// });
 
 client.connect()
 	.then(function () {
@@ -141,6 +141,178 @@ app.post('/products/:id', function (req, res) {
 	res.redirect('/products/' + id);
 });
 
+app.post('/products/:id/send', function (req, res) {
+	console.log(req.body);
+	var id = req.params.id;
+	var email = req.body.email;
+	var customers_values = [req.body.email, req.body.first_name, req.body.last_name, req.body.street, req.body.municipality, req.body.province, req.body.zipcode];
+	var orders_values = [req.body.product_id, req.body.quantity];
+
+	const acknowledge = `
+	<p>Your Order Request has been received!</p>
+	<h3>Order Details</h3>
+	<ul>
+		<li>Customer Name: ${req.body.first_name} ${req.body.last_name}</li>
+		<li>Email: ${req.body.email}</li>
+		<li>Address: ${req.body.street} ${req.body.municipality} ${req.body.province} ${req.body.zipcode}</li>
+		<li>Product ID: ${req.body.product_id}</li>
+		<li>Quantity: ${req.body.quantity}</li>
+	</ul>
+`;
+	const request = `
+	<p>You have a new Order Request!</p>
+	<h3>Order Details</h3>
+	<ul>
+		<li>Customer Name: ${req.body.first_name} ${req.body.last_name}</li>
+		<li>Email: ${req.body.email}</li>
+		<li>Address: ${req.body.street} ${req.body.municipality} ${req.body.province} ${req.body.zipcode}</li>
+		<li>Product ID: ${req.body.product_id}</li>
+		<li>Quantity: ${req.body.quantity}</li>
+	</ul>
+`;
+
+
+	client.query('SELECT email FROM customers', (req, data) => {
+		var list;
+		var existing = 0;
+		console.log(email);
+		for (var i = 0; i < data.rows.length; i++) {
+			list = data.rows[i].email;
+			console.log(list);
+			if (list == email) {
+				existing = 1;
+			}
+		}
+
+		if (existing == 1) {
+			console.log("Existing customer!");
+
+			client.query('SELECT id FROM customers WHERE email=$1', [email], (err, data) => {
+				if (err) {
+					console.log(err.stack)
+				}
+				else {
+					console.log(data.rows);
+					orders_values[2] = data.rows[0].id;
+					console.log(orders_values)
+					client.query('INSERT INTO orders(product_id, quantity, customer_id) VALUES($1, $2, $3)', orders_values, (req, data) => {
+
+						let transporter = nodemailer.createTransport({
+							host: 'smtp.gmail.com',
+							port: 465,
+							secure: true,
+							auth: {
+								user: 'fiedadwheels@gmail.com',
+								pass: 'fiedadWheels69'
+							}
+						});
+						let mailOptions1 = {
+							from: '"Fiedad Wheels" <fiedadwheels@gmail.com',
+							to: email,
+							subject: 'Fiedad Wheels Acknowledgement',
+							html: acknowledge
+						};
+
+						let mailOptions2 = {
+							from: '"Fiedad Wheels" <fiedadwheels@gmail.com>',
+							to: 'eisen1021@gmail.com, duannepiedad@gmail.com',
+							subject: 'Fiedad Wheels Request',
+							html: request
+						};
+
+						transporter.sendMail(mailOptions1, (error, info) => {
+							if (error) {
+								return console.log(error);
+							}
+						});
+
+						transporter.sendMail(mailOptions2, (error, info) => {
+							if (error) {
+								return console.log(error);
+							}
+						});
+					});
+					res.redirect('/products/' + id + '/email-exists');
+				}
+			});
+		}
+		else {
+			console.log(customers_values);
+			client.query('INSERT INTO customers(email, first_name, last_name, street, municipality, province, zipcode) VALUES($1, $2, $3, $4, $5, $6, $7)', customers_values, (err, data) => {
+				if (err) {
+					console.log(err.stack)
+				}
+				else {
+					client.query('SELECT lastval()', (err, data) => {
+						if (err) {
+							console.log(err.stack)
+						}
+						else {
+							console.log(data.rows);
+							orders_values[2] = data.rows[0].lastval;
+							console.log(orders_values)
+							client.query('INSERT INTO orders(product_id, quantity, customer_id) VALUES($1, $2, $3)', orders_values, (req, data) => {
+
+								let transporter = nodemailer.createTransport({
+									host: 'smtp.gmail.com',
+									port: 465,
+									secure: true,
+									auth: {
+										user: 'fiedadwheels@gmail.com',
+										pass: 'fiedadWheels69'
+									}
+								});
+
+								let mailOptions1 = {
+									from: '"Fiedad Wheels" <fiedadwheels@gmail.com',
+									to: email,
+									subject: 'Fiedad Wheels Acknowledgement',
+									html: acknowledge
+								};
+
+								let mailOptions2 = {
+									from: '"Fiedad Wheels" <fiedadwheels@gmail.com>',
+									to: 'eisen1021@gmail.com, duannepiedad@gmail.com',
+									subject: 'Fiedad Wheels Request',
+									html: request
+								};
+
+								transporter.sendMail(mailOptions1, (error, info) => {
+									if (error) {
+										return console.log(error);
+									}
+								});
+
+								transporter.sendMail(mailOptions2, (error, info) => {
+									if (error) {
+										return console.log(error);
+									}
+								});
+							});
+							res.redirect('/products/' + id + '/send');
+						}
+					});
+				}
+			});
+		}
+	});
+});
+
+app.get('/products/:id/send', function (req, res) {
+	var id = req.params.id;
+	res.render('email', {
+		message: 'Welcome to Fiedad Wheels! Your email has been sent!',
+		PID: id
+	});
+});
+
+app.get('/products/:id/email-exists', function (req, res) {
+	var id = req.params.id;
+	res.render('email', {
+		message: 'Welcome back! Your email has been sent!',
+		PID: id
+	});
+});
 
 // PRODUCTS CATEGORY
 app.post('/categories', function (req, res) {
@@ -209,7 +381,64 @@ app.get('/brand/create', (req, res) => {
 	res.render('create_brands');
 });
 
+// CUSTOMERS
+app.get('/customers', (req, res) => {
+	client.query('SELECT * FROM customers', (req, data) => {
+		var list = [];
+		for (var i = 1; i < data.rows.length + 1; i++) {
+			list.push(data.rows[i - 1]);
+		}
+		res.render('customers', {
+			data: list
+		});
+	});
+});
 
+app.get('/customers/:id', (req, res) => {
+	var id = req.params.id;
+	console.log(id);
+	client.query('SELECT orders.id, orders.customer_id, orders.product_id, orders.purchase_date, orders.quantity, customers.email, customers.first_name,customers.middle_name, customers.last_name, customers.street, customers.municipality, customers.province, customers.zipcode, products.product_name FROM orders INNER JOIN customers ON orders.customer_id = customers.id INNER JOIN products ON orders.product_id = products.id WHERE orders.customer_id = $1', [id], (err, data) => {
+		if (err) {
+			console.log(err);
+		}
+		else {
+			var list = [];
+			console.log(data.rows);
+			for (var i = 1; i < data.rows.length + 1; i++) {
+				list.push(data.rows[i - 1]);
+			}
+			data.rows[0];
+			res.render('customer_details', {
+				data: list,
+				first_name: list[0].first_name,
+				middle_name: list[0].middle_name,
+				last_name: list[0].last_name,
+				customer_id: list[0].customer_id,
+				email: list[0].email,
+				street: list[0].street,
+				municipality: list[0].municipality,
+				province: list[0].province,
+				zipcode: list[0].zipcode
+			});
+		}
+	});
+});
+
+
+// ORDERS
+app.get('/orders', (req, res) => {
+	client.query('SELECT * FROM orders', (req, data) => {
+		var list = [];
+		for (var i = 1; i < data.rows.length + 1; i++) {
+			list.push(data.rows[i - 1]);
+		}
+		res.render('orders', {
+			data: list
+		});
+	});
+});
+
+// MEMBERS
 app.get('/team/11/Eisen', function (req, res) {
 	res.render('member', {
 		name: 'Eisen Danielle Fiesta',

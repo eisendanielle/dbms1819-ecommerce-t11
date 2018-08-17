@@ -1,0 +1,36 @@
+<div class="container jumbotron customer_details">
+    <div class="col-lg-8 col-md-8 col-sm-8 mb-2 mx-auto">
+        <h3 class="text-center">
+            {{first_name}} {{middle_name}} {{last_name}}
+        </h3>
+
+        <div class="card-body">
+            <h5 class="card-title">Customer ID: {{customer_id}}</h5>
+            <h6 class="card-title">Email: {{email}}</h6>
+            <h6 class="card-title">Address: {{street}} {{municipality}} {{province}} {{zipcode}}</h6>
+        </div>
+    </div>
+
+    <h4 align="center">Orders</h4>
+    <div class="col-12 mx-auto">
+        <table class="table">
+            <tr>
+                <th>Order ID</th>
+                <th>Purchase Date</th>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+            </tr>
+
+            {{#each data}}
+            <tr>
+                <td>{{this.id}}</td>
+                <td>{{this.purchase_date}}</td>
+                <td>{{this.product_id}}</td>
+                <td>{{this.product_name}}</td>
+                <td>{{this.quantity}}</td>
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+</div>

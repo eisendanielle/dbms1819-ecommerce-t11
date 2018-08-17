@@ -4,9 +4,9 @@ CREATE TABLE "customers" (
   "first_name" VARCHAR(80),
   "middle_name" VARCHAR(80),
   "last_name" VARCHAR(80),
-  "state" VARCHAR(80),
-  "city" VARCHAR(80),
   "street" VARCHAR(80),
+  "municipality" VARCHAR(80),
+  "province" VARCHAR(80),
   "zipcode" VARCHAR(80)
 );
 
@@ -48,4 +48,3 @@ CREATE TABLE "customer_favorite_products" (
   "customer_id" INT REFERENCES customers(id),
   "product_id" INT REFERENCES products(id)
 );
-

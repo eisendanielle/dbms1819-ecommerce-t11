@@ -1,0 +1,31 @@
+<div class="container jumbotron orders">
+    <h3 align="center">Orders</h3>.
+
+    <div class="col-12 mx-auto">
+        <table class="table">
+            <tr>
+                <th>Order ID</th>
+                <th>Customer ID</th>
+                <th>Product ID</th>
+                <th>Quantity</th>
+                <th>Purchase Date</th>
+            </tr>
+            {{#each data}}
+
+            <tr>
+                <td>{{this.id}}</td>
+                <td>
+                    <a href="/customers/{{this.customer_id}}">
+                        {{this.customer_id}}</td>
+                </a>
+                <td>
+                    <a href="/products/{{this.product_id}}">
+                        {{this.product_id}}</td>
+                        </a>
+                <td>{{this.quantity}}</td>
+                <td>{{this.purchase_date}}</td>
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+</div>
