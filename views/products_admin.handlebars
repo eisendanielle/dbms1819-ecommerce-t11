@@ -1,0 +1,65 @@
+<div class="container jumbotron products_admin">
+    {{#each data}}
+    <h3 class="text-center">{{this.product_name}}</h3>
+
+    <div class="col-12 mx-auto wholeCard">
+        <div class="card bg-light text-dark center">
+            <img class="card-img-top" src="{{this.pic}}" alt="">
+
+            <div class="card-body">
+                <h5 class="card-title">Brand: {{this.brand_name}}</h5>
+                <h5 class="card-title">₱ {{this.price}}</h5>
+                <p class="card-text">
+                    <h6 class="card-title">Warranty valid for {{this.warranty}} year/s</h6>
+                </p>
+                <p>
+                    <h6 class="card-title">{{this.category_name}}</h6>
+                </p>
+                <h6 class="card-title">{{this.product_description}}</h6>
+            </div>
+        </div>
+        {{/each}}
+
+        <div class="form-group submit">
+            <div class="text-center">
+                {{#each data}}
+                <form method="GET" action="/admin/product/update/{{this.id}}">
+                    <button type="submit" class="btn submitButton" title="Update Product">
+                        Update Product
+                    </button>
+                </form>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .wholeCard {
+        width: 50%;
+        text-align: center;
+    }
+
+    .submit {
+        padding-top: 10px;
+        position: relative;
+        max-width: 100%;
+        text-align: end;
+    }
+
+    .submitButton:hover {
+        transition: all 0.4s ease-in-out;
+        box-shadow: 0 5px 10px rgba(76, 102, 119);
+    }
+
+    .submitButton {
+        background: transparent;
+        border: 2px solid rgb(61, 79, 93);
+        color: rgb(61, 79, 93);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-size: 85%;
+        list-style: none;
+    }
+</style>

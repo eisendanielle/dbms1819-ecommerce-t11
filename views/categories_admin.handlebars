@@ -1,0 +1,48 @@
+<div class="container jumbotron categories_admin" style="padding-top: 20px;">
+    <div class="row">
+        {{#each data}}
+        <div class="col-12 card" style="margin-top: 10px; padding-top: 5px;">
+            <h5 class="card-body">{{this.category_name}}</h5>
+        </div>
+        {{/each}}
+    </div>
+
+
+    <div class="row submit">
+        <div class="col">
+            <form method="GET" action="/admin/category/create" style="margin-bottom: -20px;">
+                <button type="submit" class="btn submitButton" title="Create category">
+                    Create Category
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .categories_admin {
+        text-align: center;
+    }
+
+    .submit {
+        padding-top: 50px;
+        position: relative;
+        max-width: 100%;
+        text-align: end;
+    }
+
+    .submitButton:hover {
+        transition: all 0.4s ease-in-out;
+        box-shadow: 0 5px 10px rgba(76, 102, 119);
+    }
+
+    .submitButton {
+        background: transparent;
+        border: 2px solid rgb(61, 79, 93);
+        color: rgb(61, 79, 93);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-size: 85%;
+        list-style: none;
+    }
+</style>

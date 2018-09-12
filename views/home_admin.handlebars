@@ -1,0 +1,82 @@
+<div class="container home_admin" style="padding-bottom: 20px;">
+    <h3 class="text-center" style="margin-top: -20px;">{{title}}</h3>
+    <div class="row productData mx-auto">
+        {{#each data}}
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 cards" style="padding-bottom: 10px;">
+            <div class="card w-250 h-350 cardSize">
+                <a href="/admin/products/{{this.id}}" class="cardTextParent">
+                    <img class="card-img-top productImage" src="{{this.pic}}">
+                    <div class="">
+                        <h5 class="card-title text-center cardText" style="margin-top:10px;">{{this.product_name}}</h5>
+                    </div>
+                    <h6 class="card-body text-center cardText" style="margin-top: -20px; margin-bottom: -5px;">₱ {{this.price}}</h6>
+                </a>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+    <div class="row submit">
+        <div class="col">
+            <form method="GET" action="/admin/product/create" style="padding-bottom: 20px;">
+                <button type="submit" class="btn submitButton" title="Create product">
+                    Create Product
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .home_admin {
+        width: 100%;
+        text-align: center;
+    }
+
+    .cardText {
+        color: rgb(61, 79, 93);
+    }
+
+    .cardText:hover,
+    .cardTextParent:hover {
+        text-decoration: none;
+    }
+
+    .cardSize:hover {
+        transition: all 0.4s ease-in-out;
+        box-shadow: 0 5px 10px rgba(76, 102, 119);
+    }
+
+    .productImage {
+        min-height: 245px;
+    }
+
+    .cardSize {
+        min-height: 350px;
+        max-height: 545px;
+    }
+
+    .submit {
+        padding-top: 60px;
+        position: relative;
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .submitButton:hover {
+        transition: all 0.4s ease-in-out;
+        box-shadow: 0 5px 10px rgba(76, 102, 119);
+    }
+
+    .submitButton {
+        background: transparent;
+        border: 2px solid rgb(61, 79, 93);
+        color: rgb(61, 79, 93);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-size: 85%;
+        list-style: none;
+    }
+</style>

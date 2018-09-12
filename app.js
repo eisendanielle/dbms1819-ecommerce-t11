@@ -4,7 +4,14 @@ const { Client } = require('pg');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
+const moment = require('moment');
 const PORT = process.env.PORT || 5000
+
+var Product = require('./models/product');
+var Brand = require('./models/brand');
+var Category = require('./models/category');
+var Order = require('./models/order');
+var Customer = require('./models/customer');
 
 // const client = new Client({
 // 	database: 'storedb',
@@ -40,105 +47,116 @@ app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-
-
 app.get('/', function (req, res) {
-	client.query('SELECT * FROM products ORDER BY products.id', (req, data) => {
-		var list = [];
-		for (var i = 0; i < data.rows.length; i++) {
-			list.push(data.rows[i]);
-		}
+	Product.list(client, {}, function (products) {
 		res.render('home', {
-			data: list,
+			data: products,
 			title: 'Our Products'
 		});
 	});
 });
 
+
 app.get('/products/:id', (req, res) => {
-	var id = req.params.id;
-	client.query('SELECT products.id, products.product_name, products.product_description, products.tagline, products.price, products.warranty, products.pic, products.category_id, products_category.category_name, products.brand_id, brands.brand_name FROM products INNER JOIN products_category ON products.category_id = products_category.id INNER JOIN brands ON products.brand_id = brands.id ORDER BY products.id', (req, data) => {
-		var list = [];
-		for (var i = 0; i < data.rows.length + 1; i++) {
-			if (i == id) {
-				list.push(data.rows[i - 1]);
-			}
-		}
+	Product.listDetails(client, req.params.id, function (productData) {
 		res.render('products', {
-			data: list
+			data: productData,
+			layout: 'main'
 		});
 	});
 });
 
+app.get('/admin', function (req, res) {
+	Product.list(client, {}, function (products) {
+		res.render('home_admin', {
+			data: products,
+			title: 'Welcome admin!',
+			layout: 'admin'
+		});
+	});
+});
 
-app.get('/product/create', (req, res) => {
-	client.query('SELECT * FROM products_category', (req, data) => {
-		var list = [];
-		for (var i = 1; i < data.rows.length + 1; i++) {
-			list.push(data.rows[i - 1]);
-		}
-		client.query('SELECT * FROM brands', (req, data) => {
-			var list2 = [];
-			for (var i = 1; i < data.rows.length + 1; i++) {
-				list2.push(data.rows[i - 1]);
-			}
+app.get('/admin/products/:id', (req, res) => {
+	Product.listDetails(client, req.params.id, function (productData) {
+		res.render('products_admin', {
+			data: productData,
+			layout: 'admin'
+		});
+	});
+});
+
+app.get('/admin/product/create', (req, res) => {
+	Category.list(client, {}, function (categories) {
+		Brand.list(client, {}, function (brands) {
 			res.render('create_product', {
-				data: list,
-				data2: list2
+				data: categories,
+				data2: brands,
+				layout: 'admin'
 			});
 		});
 	});
 });
 
-app.post('/', function (req, res) {
-	var values = [];
-	values = [req.body.product_name, req.body.product_description, req.body.tagline, req.body.price, req.body.warranty, req.body.pic, req.body.category_id, req.body.brand_id];
-	client.query("INSERT INTO products(product_name, product_description, tagline, price, warranty, pic, category_id, brand_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8)", values, (err, res) => {
-		if (err) {
-			console.log(err.stack)
-		}
-		else {
-			console.log(res.rows[0])
+app.post('/admin', function (req, res) {
+	var productData = {
+		product_name: req.body.product_name,
+		product_description: req.body.product_description,
+		tagline: req.body.tagline,
+		price: req.body.price,
+		warranty: req.body.warranty,
+		pic: req.body.pic,
+		category_id: req.body.category_id,
+		brand_id: req.body.brand_id
+	};
+
+	Product.create(client, productData, function (error) {
+		if (error === 1) {
+			res.render('duplicate', {
+				layout: 'admin',
+				name: 'Products',
+				message: 'Product already exists',
+				action: '/admin'
+			});
+		} else {
+			res.redirect('/admin');
 		}
 	});
-	res.redirect('/');
 });
 
-
-app.get('/product/update/:id', (req, res) => {
-	var id = req.params.id;
-	client.query('SELECT products.id, products.product_name, products.product_description, products.tagline, products.price, products.warranty, products.pic, products.category_id, products_category.category_name, products.brand_id, brands.brand_name FROM products INNER JOIN products_category ON products.category_id = products_category.id INNER JOIN brands ON products.brand_id = brands.id ORDER BY products.id', (req, data) => {
-		var list = [];
-		for (var i = 1; i < data.rows.length + 1; i++) {
-			if (i == id) {
-				list.push(data.rows[i - 1]);
-			}
-		}
-		client.query('SELECT * FROM products_category', (req, data) => {
-			var list2 = [];
-			for (var i = 1; i < data.rows.length + 1; i++) {
-				list2.push(data.rows[i - 1]);
-			}
-			client.query('SELECT * FROM brands', (req, data) => {
-				var list3 = [];
-				for (var i = 1; i < data.rows.length + 1; i++) {
-					list3.push(data.rows[i - 1]);
-				}
+app.get('/admin/product/update/:id', (req, res) => {
+	Product.getById(client, req.params.id, function (products) {
+		Category.list(client, {}, function (categories) {
+			Brand.list(client, {}, function (brands) {
 				res.render('update_product', {
-					products: list,
-					products_category: list2,
-					brands: list3
+					products: products,
+					products_category: categories,
+					brands: brands,
+					layout: 'admin'
 				});
 			});
 		});
 	});
 });
 
-app.post('/products/:id', function (req, res) {
+app.post('/admin/products/:id', function (req, res) {
 	console.log(req.body);
-	var id = req.params.id;
-	client.query("UPDATE products SET product_name = '" + req.body.product_name + "', product_description = '" + req.body.product_description + "', tagline = '" + req.body.tagline + "', price = '" + req.body.price + "', warranty = '" + req.body.warranty + "', pic = '" + req.body.pic + "', category_id = '" + req.body.category_id + "', brand_id = '" + req.body.brand_id + "' WHERE id = '" + req.body.id + "' ");
-	res.redirect('/products/' + id);
+	var id = parseInt(req.params.id);
+	var productData = {
+		id: req.body.id,
+		product_name: req.body.product_name,
+		product_description: req.body.product_description,
+		tagline: req.body.tagline,
+		price: req.body.price,
+		warranty: req.body.warranty,
+		pic: req.body.pic,
+		category_id: req.body.category_id,
+		brand_id: req.body.brand_id
+	};
+
+	Product.update(client, productData, function (error) {
+		console.log(error);
+		res.redirect('/admin/products/' + id);
+	});
 });
 
 app.post('/products/:id/send', function (req, res) {
@@ -209,14 +227,14 @@ app.post('/products/:id/send', function (req, res) {
 						let mailOptions1 = {
 							from: '"Fiedad Wheels" <fiedadwheels@gmail.com',
 							to: email,
-							subject: 'Fiedad Wheels Acknowledgement',
+							subject: 'Fiedad Wheels Order Acknowledgement',
 							html: acknowledge
 						};
 
 						let mailOptions2 = {
 							from: '"Fiedad Wheels" <fiedadwheels@gmail.com>',
 							to: 'eisen1021@gmail.com, duannepiedad@gmail.com',
-							subject: 'Fiedad Wheels Request',
+							subject: 'Fiedad Wheels Order Request',
 							html: request
 						};
 
@@ -266,14 +284,14 @@ app.post('/products/:id/send', function (req, res) {
 								let mailOptions1 = {
 									from: '"Fiedad Wheels" <fiedadwheels@gmail.com',
 									to: email,
-									subject: 'Fiedad Wheels Acknowledgement',
+									subject: 'Fiedad Wheels Order Acknowledgement',
 									html: acknowledge
 								};
 
 								let mailOptions2 = {
 									from: '"Fiedad Wheels" <fiedadwheels@gmail.com>',
 									to: 'eisen1021@gmail.com, duannepiedad@gmail.com',
-									subject: 'Fiedad Wheels Request',
+									subject: 'Fiedad Wheels Order Request',
 									html: request
 								};
 
@@ -315,131 +333,130 @@ app.get('/products/:id/email-exists', function (req, res) {
 });
 
 // PRODUCTS CATEGORY
-app.post('/categories', function (req, res) {
-	var values = [];
-	values = [req.body.category_name];
-	console.log(req.body);
-	console.log(values);
-	client.query("INSERT INTO products_category(category_name) VALUES($1)", values, (err, res) => {
-		if (err) {
-			console.log(err.stack)
-		}
-		else {
-			console.log(res.rows[0])
-		}
-	});
-	res.redirect('/categories');
-});
-
-
-app.get('/categories', (req, res) => {
-	client.query('SELECT * FROM products_category', (req, data) => {
-		var list = [];
-		for (var i = 1; i < data.rows.length + 1; i++) {
-			list.push(data.rows[i - 1]);
-		}
+app.get('/categories', (req, res) => { // category list
+	Category.list(client, {}, function (categories) {
 		res.render('categories', {
-			data: list
+			data: categories
 		});
 	});
 });
 
-app.get('/category/create', (req, res) => {
-	res.render('create_categories');
+app.get('/admin/categories', (req, res) => {
+	Category.list(client, {}, function (categories) {
+		res.render('categories_admin', {
+			data: categories,
+			layout: 'admin'
+		});
+	});
+});
+
+app.get('/admin/category/create', (req, res) => {
+	res.render('create_categories', {
+		layout: 'admin'
+	});
+});
+
+app.post('/admin/categories', function (req, res) {
+	var categoryData = req.body.category_name;
+	Category.create(client, categoryData, function (error) {
+		if (error === 1) {
+			res.render('existing', {
+				layout: 'admin',
+				name: 'Categories',
+				message: 'Category already exists!',
+				action: '/admin/categories'
+			});
+		} else {
+			res.redirect('/admin/categories');
+		}
+	});
 });
 
 // PRODUCTS BRAND
-app.post('/brands', function (req, res) {
-	var values = [];
-	values = [req.body.brand_name, req.body.brand_description];
-	console.log(req.body);
-	console.log(values);
-	client.query("INSERT INTO brands(brand_name, brand_description) VALUES($1, $2)", values, (err, res) => {
-		if (err) {
-			console.log(err.stack)
-		}
-		else {
-			console.log(res.rows[0])
-		}
-	});
-	res.redirect('/brands');
-});
-
-app.get('/brands', (req, res) => {
-	client.query('SELECT * FROM brands', (req, data) => {
-		var list = [];
-		for (var i = 1; i < data.rows.length + 1; i++) {
-			list.push(data.rows[i - 1]);
-		}
+app.get('/brands', (req, res) => { // brand list
+	Brand.list(client, {}, function (brands) {
 		res.render('brands', {
-			data: list
+			data: brands
 		});
 	});
 });
 
-app.get('/brand/create', (req, res) => {
-	res.render('create_brands');
+app.get('/admin/brands', (req, res) => {
+	Brand.list(client, {}, function (brands) {
+		res.render('brands_admin', {
+			data: brands,
+			layout: 'admin'
+		});
+	});
 });
+
+app.get('/admin/brand/create', (req, res) => {
+	res.render('create_brands', {
+		layout: 'admin'
+	});
+});
+
+app.post('/admin/brands', function (req, res) {
+	var brandData = {
+		brand_name: req.body.brand_name,
+		brand_description: req.body.brand_description
+	};
+
+	Brand.create(client, brandData, function (error) {
+		if (error === 1) {
+			res.render('existing', {
+				layout: 'admin',
+				name: 'Brands',
+				message: 'Brand already exists!',
+				action: '/admin/brands'
+			});
+		} else {
+			res.redirect('/admin/brands');
+		}
+	});
+});
+
 
 // CUSTOMERS
-app.get('/customers', (req, res) => {
-	client.query('SELECT * FROM customers', (req, data) => {
-		var list = [];
-		for (var i = 1; i < data.rows.length + 1; i++) {
-			list.push(data.rows[i - 1]);
-		}
+app.get('/admin/customers', (req, res) => {
+	Customer.list(client, function (customers) {
 		res.render('customers', {
-			data: list
+			data: customers,
+			layout: 'admin'
 		});
 	});
 });
 
-app.get('/customers/:id', (req, res) => {
-	var id = req.params.id;
-	console.log(id);
-	client.query('SELECT orders.id, orders.customer_id, orders.product_id, orders.purchase_date, orders.quantity, customers.email, customers.first_name,customers.middle_name, customers.last_name, customers.street, customers.municipality, customers.province, customers.zipcode, products.product_name FROM orders INNER JOIN customers ON orders.customer_id = customers.id INNER JOIN products ON orders.product_id = products.id WHERE orders.customer_id = $1', [id], (err, data) => {
-		if (err) {
-			console.log(err);
-		}
-		else {
-			var list = [];
-			console.log(data.rows);
-			for (var i = 1; i < data.rows.length + 1; i++) {
-				list.push(data.rows[i - 1]);
-			}
-			data.rows[0];
-			res.render('customer_details', {
-				data: list,
-				first_name: list[0].first_name,
-				middle_name: list[0].middle_name,
-				last_name: list[0].last_name,
-				customer_id: list[0].customer_id,
-				email: list[0].email,
-				street: list[0].street,
-				municipality: list[0].municipality,
-				province: list[0].province,
-				zipcode: list[0].zipcode
-			});
-		}
+app.get('/admin/customers/:id', (req, res) => {
+	Order.customerList(client, req.params.id, function (orderData) {
+		res.render('customer_details', {
+			data: orderData,
+			layout: 'admin',
+			first_name: orderData[0].first_name,
+			last_name: orderData[0].last_name,
+			customer_id: orderData[0].customer_id,
+			email: orderData[0].email,
+			street: orderData[0].street,
+			municipality: orderData[0].municipality,
+			province: orderData[0].province,
+			zipcode: orderData[0].zipcode,
+			product_id: orderData[0].product_id
+		});
 	});
 });
 
-
 // ORDERS
-app.get('/orders', (req, res) => {
-	client.query('SELECT * FROM orders', (req, data) => {
-		var list = [];
-		for (var i = 1; i < data.rows.length + 1; i++) {
-			list.push(data.rows[i - 1]);
-		}
+app.get('/admin/orders', (req, res) => {
+	Order.list(client, {}, function (orders) {
 		res.render('orders', {
-			data: list
+			data: orders,
+			layout: 'admin'
 		});
 	});
 });
 
 // MEMBERS
-app.get('/team/11/Eisen', function (req, res) {
+app.get('/Eisen', function (req, res) {
 	res.render('member', {
 		name: 'Eisen Danielle Fiesta',
 		email: 'eisen1021@gmail.com',
@@ -449,7 +466,7 @@ app.get('/team/11/Eisen', function (req, res) {
 	});
 });
 
-app.get('/team/11/Duanne', function (req, res) {
+app.get('/Duanne', function (req, res) {
 	res.render('member', {
 		name: 'Duanne Malvin Piedad',
 		email: 'duannepiedad@gmail.com',
