@@ -39,7 +39,6 @@ client.connect()
 		console.log('Error');
 	})
 
-
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
@@ -503,7 +502,6 @@ app.post('/admin/brands', function (req, res) {
 		}
 	});
 });
-
 
 // CUSTOMERS
 app.get('/admin/customers/page/:id', (req, res) => { 
