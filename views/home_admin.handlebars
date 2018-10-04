@@ -3,7 +3,7 @@
     <div class="row productData mx-auto">
         {{#each data}}
 
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 cards" style="padding-bottom: 10px;">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 mx-auto cards" style="padding-bottom: 10px;">
             <div class="card w-250 h-350 cardSize">
                 <a href="/admin/products/{{this.id}}" class="cardTextParent">
                     <img class="card-img-top productImage" src="{{this.pic}}">
@@ -17,7 +17,22 @@
         {{/each}}
     </div>
 
-    <div class="row submit">
+    <center>
+        <h6 class="pageDirect">
+            {{#each pages}} &ensp;<a href="/admin/products/page/{{this}}" class="pager">Page {{this}}</a>
+            {{/each}}
+        </h6>
+
+        <h6>
+            {{#if prevPage}}
+            <a href="/admin/products/page/{{prevPage}}" class="pager">Previous Page</a>
+            {{/if}} {{#if nextPage}}
+            <a href="/admin/products/page/{{nextPage}}" class="pager">Next Page</a>
+            {{/if}}
+        </h6>
+    </center>
+
+    <div class="row submit" style="text-align: right;">
         <div class="col">
             <form method="GET" action="/admin/product/create" style="padding-bottom: 20px;">
                 <button type="submit" class="btn submitButton" title="Create product">
@@ -78,5 +93,15 @@
         text-transform: uppercase;
         font-size: 85%;
         list-style: none;
+    }
+
+    .pageDirect {
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-size: 85%;
+    }
+
+    .pager {
+        color: rgb(61, 79, 93);
     }
 </style>

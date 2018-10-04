@@ -1,5 +1,20 @@
 var Product = {
 
+    list: function (client, filter, callback) {
+        console.log(filter.page);
+        const productListQuery = `
+          SELECT * 
+          FROM products 
+          ORDER BY products.id
+          LIMIT 10
+          OFFSET ((${filter.page}-1)*10)
+        `;
+        client.query(productListQuery, (req, data) => {
+            console.log(data.rows);
+            callback(data.rows);
+        });
+    },
+
     listDetails: (client, productID, callback) => {
 
         const productQuery = `
@@ -31,35 +46,20 @@ var Product = {
         });
     },
 
-    list: (client, filter, callback) => {
-        const productListQuery = `
-        SELECT 
-        * FROM products 
-        ORDER BY id ASC
-      `;
-
-        client.query(productListQuery, (req, data) => {
-            console.log(data.rows);
-            callback(data.rows);
-        });
-    },
-
     create: function (client, productData, callback) {
         var error = 0;
+        console.log(productData);
         const insertQuery = `
         INSERT INTO products(product_name, product_description, tagline, price, warranty, pic, category_id, brand_id) 
-        VALUES('${productData.product_name}', '${productData.product_description}', 
-        '${productData.tagline}', '${productData.price}', '${productData.warranty}', 
-        '${productData.pic}', '${productData.category_id}', '${productData.brand_id}')
+        VALUES('${productData.product_name}', '${productData.product_description}', '${productData.tagline}', '${productData.price}', '${productData.warranty}', '${productData.pic}', '${productData.category_id}', '${productData.brand_id}')
         `;
-
         client.query(insertQuery)
             .then((result) => {
-                console.log('Succesful');
+                console.log('Inserted');
                 callback(error);
             })
             .catch((err) => {
-                console.log('Error', err);
+                console.log('error', err);
                 error = 1;
                 callback(error);
             });
@@ -94,7 +94,7 @@ var Product = {
                 callback(error);
             });
     },
-    
+
     getById: function (client, productId, callback) {
         const productQuery = `
         SELECT 
@@ -116,10 +116,22 @@ var Product = {
         WHERE products.id=${productId}
         `;
         client.query(productQuery, (req, data) => {
-          console.log(data.rows);
-          callback(data.rows);
+            console.log(data.rows);
+            callback(data.rows);
         });
-      }    
+    },
+
+    getTotal: function (client, callback) {
+        const query = `
+          SELECT COUNT(*)
+          FROM products
+        `;
+        client.query(query, (req, data) => {
+            console.log(data.rows);
+            callback(data.rows);
+        });
+    },
+
 };
 
 module.exports = Product;

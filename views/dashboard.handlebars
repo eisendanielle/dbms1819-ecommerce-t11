@@ -1,0 +1,181 @@
+<div class="container-fluid jumbotron dashboard">
+    <div class="row">
+
+        <div class="col-lg-6">
+            <h5 align="center">Top 10 Customers With The Most Number Of Orders</h5>
+
+            <table style="width:80%" class="table table-sm mx-auto">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Number of Orders</th>
+                </tr>
+                {{#each customersWithMostOrders}}
+                <tr>
+                    <td>
+                        {{this.first_name}} {{this.last_name}}
+                    </td>
+                    <td>
+                        {{this.email}}
+                    </td>
+                    <td>
+                        {{this.number_of_orders}}
+                    </td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+
+        <div class="col-lg-6">
+            <h5 align="center">Top 10 Customers With Highest Payment</h5>
+
+            <table style="width:80%" class="table table-sm mx-auto">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Total Payment</th>
+                </tr>
+                {{#each customersWithHighestPayment}}
+                <tr>
+                    <td>
+                        {{this.first_name}} {{this.last_name}}
+                    </td>
+                    <td>
+                        {{this.email}}
+                    </td>
+                    <td>
+                        ₱ {{this.total_payment}}
+                    </td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+
+        <div class="col-lg-6">
+            <h5 align="center">Top 10 Most Ordered Products</h5>
+            <table style="width:80%" class="table table-sm mx-auto">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Number of Orders</th>
+                </tr>
+                {{#each mostOrderedProducts}}
+                <tr>
+                    <td>
+                        {{this.product_name}}
+                    </td>
+                    <td>
+                        {{this.number_of_orders}}
+                    </td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+
+        <div class="col-lg-6">
+            <h5 align="center">Top 10 Least Ordered Products</h5>
+            <table style="width:80%" class="table table-sm mx-auto">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Number of Orders</th>
+                </tr>
+                {{#each leastOrderedProducts}}
+                <tr>
+                    <td>
+                        {{this.product_name}}
+                    </td>
+                    <td>
+                        {{this.number_of_orders}}
+                    </td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+
+        <div class="col-lg-6">
+            <h5 align="center">Top 3 Most Ordered Brands</h5>
+            <table style="width:80%" class="table table-sm mx-auto">
+                <tr>
+                    <th>Brand Name</th>
+                    <th>Number of Orders</th>
+                </tr>
+                {{#each mostOrderedBrands}}
+                <tr>
+                    <td>
+                        {{this.brand_name}}
+                    </td>
+                    <td>
+                        {{this.number_of_orders}}
+                    </td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+
+        <div class="col-lg-6">
+            <h5 align="center">Top 3 Most Ordered Categories</h5>
+            <table style="width:80%" class="table table-sm mx-auto">
+                <tr>
+                    <th>Brand Name</th>
+                    <th>Number of Orders</th>
+                </tr>
+                {{#each mostOrderedCategories}}
+                <tr>
+                    <td>
+                        {{this.category_name}}
+                    </td>
+                    <td>
+                        {{this.number_of_orders}}
+                    </td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+
+        <div class="col-lg-6">
+            <h5 align="center">Total Sales</h5>
+            <table style="width:80%" class="table table-sm mx-auto">
+                <tr>
+                    <th>For the Last 7 Days</th>
+                    <th>For the Last 30 Days</th>
+                </tr>
+                {{#each salesInTheLastSevenDays}}
+                <tr>
+                    <td>
+                        ₱ {{this.total_sales_for_seven_days}}
+                    </td>
+                    {{/each}} {{#each salesInTheLastThirtyDays}}
+                    <td>
+                        ₱ {{this.total_sales_for_thirty_days}}
+                    </td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+
+        <div class="col-lg-6">
+            <h5 align="center">Total Orders for 7 Days</h5>
+            <table style="width:80%" class="table table-sm mx-auto">
+                <tr>
+                    <th>Total Orders</th>
+                </tr>
+                {{#each dailyOrderCount}}
+                <tr>
+                    <td>
+                        {{this.total_orders}}
+                    </td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard {
+        text-align: center;
+    }
+    
+    .col-lg-6 {
+        padding-bottom: 10px;
+    }
+</style>

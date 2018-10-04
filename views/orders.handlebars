@@ -15,17 +15,43 @@
             <tr>
                 <td>{{this.id}}</td>
                 <td>
-                    {{!-- <a href="/admin/customers/{{this.id}}"> --}}
-                        {{this.first_name}} {{this.last_name}}</td>
+                    {{!-- <a href="/admin/customers/{{this.id}}"> --}} {{this.first_name}} {{this.last_name}}</td>
                 </a>
                 <td>
-                    {{!-- <a href="/admin/products/{{this.id}}"> --}}
-                        {{this.product_name}}</td>
-                        </a>
+                    {{!-- <a href="/admin/products/{{this.id}}"> --}} {{this.product_name}}
+                </td>
+                </a>
                 <td>{{this.quantity}}</td>
                 <td>{{this.purchase_date}}</td>
             </tr>
             {{/each}}
         </table>
     </div>
+
+    <center>
+        <h6 class="pageDirect">
+            {{#each pages}} &ensp;<a href="/admin/orders/page/{{this}}" class="pager">Page {{this}}</a>
+            {{/each}}
+        </h6>
+
+        <h6>
+            {{#if prevPage}}
+            <a href="/admin/orders/page/{{prevPage}}" class="pager">Previous Page</a>
+            {{/if}} {{#if nextPage}}
+            <a href="/admin/orders/page/{{nextPage}}" class="pager">Next Page</a>
+            {{/if}}
+        </h6>
+    </center>
 </div>
+
+<style>
+    .pageDirect {
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-size: 85%;
+    }
+
+    .pager {
+        color: rgb(61, 79, 93);
+    }
+</style>

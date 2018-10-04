@@ -12,6 +12,7 @@ var Brand = require('./models/brand');
 var Category = require('./models/category');
 var Order = require('./models/order');
 var Customer = require('./models/customer');
+var Dashboard = require('./models/dashboard');
 
 // const client = new Client({
 // 	database: 'storedb',
@@ -48,14 +49,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
-	Product.list(client, {}, function (products) {
-		res.render('home', {
-			data: products,
-			title: 'Our Products'
-		});
-	});
+	res.redirect('/page/1');
 });
-
 
 app.get('/products/:id', (req, res) => {
 	Product.listDetails(client, req.params.id, function (productData) {
@@ -66,12 +61,71 @@ app.get('/products/:id', (req, res) => {
 	});
 });
 
-app.get('/admin', function (req, res) {
-	Product.list(client, {}, function (products) {
+app.get('/page/:id', function (req, res) {
+	var page = parseInt(req.params.id);
+	var totalItems, totalPage, prevPage, nextPage, lastPage;
+	var pages = [];
+	Product.getTotal(client, function (total) {
+		totalItems = total[0].count;
+		totalPage = totalItems / 10;
+		for (var i = 1; i < totalPage + 1; i++) {
+			pages[i - 1] = i;
+			lastPage = i;
+		};
+		if (page === 1) {
+			prevPage = 0;
+			nextPage = 2;
+		} else if (page > 1 && page < lastPage) {
+			prevPage = page - 1;
+			nextPage = page + 1;
+		} else {
+			prevPage = lastPage - 1;
+			nextPage = 0;
+		}
+	});
+	Product.list(client, { page }, function (products) {
+		res.render('home', {
+			data: products,
+			page: page,
+			pages: pages,
+			prevPage: prevPage,
+			nextPage: nextPage,
+			title: 'Our Products'
+		});
+	});
+});
+
+app.get('/admin/products/page/:id', function (req, res) { 
+	var page = parseInt(req.params.id);
+	var totalItems, totalPage, prevPage, nextPage, lastPage;
+	var pages = [];
+	Product.getTotal(client, function (total) {
+		totalItems = total[0].count;
+		totalPage = totalItems / 10;
+		for (var i = 1; i < totalPage + 1; i++) {
+			pages[i - 1] = i;
+			lastPage = i;
+		};
+		if (page === 1) {
+			prevPage = 0;
+			nextPage = 2;
+		} else if (page > 1 && page < lastPage) {
+			prevPage = page - 1;
+			nextPage = page + 1;
+		} else {
+			prevPage = lastPage - 1;
+			nextPage = 0;
+		}
+	});
+	Product.list(client, { page }, function (products) {
 		res.render('home_admin', {
 			data: products,
-			title: 'Welcome admin!',
-			layout: 'admin'
+			page: page,
+			pages: pages,
+			prevPage: prevPage,
+			nextPage: nextPage,
+			layout: 'admin',
+			title: 'Our Products'
 		});
 	});
 });
@@ -97,29 +151,63 @@ app.get('/admin/product/create', (req, res) => {
 	});
 });
 
-app.post('/admin', function (req, res) {
+app.post('/admin/products', function (req, res) { 
 	var productData = {
-		product_name: req.body.product_name,
-		product_description: req.body.product_description,
-		tagline: req.body.tagline,
-		price: req.body.price,
-		warranty: req.body.warranty,
-		pic: req.body.pic,
-		category_id: req.body.category_id,
-		brand_id: req.body.brand_id
+	  product_name: req.body.product_name,
+	  product_description: req.body.product_description,
+	  tagline: req.body.tagline,
+	  price: req.body.price,
+	  warranty: req.body.warranty,
+	  pic: req.body.pic,
+	  category_id: req.body.category_id,
+	  brand_id: req.body.brand_id
 	};
-
+  
 	Product.create(client, productData, function (error) {
-		if (error === 1) {
-			res.render('duplicate', {
-				layout: 'admin',
-				name: 'Products',
-				message: 'Product already exists',
-				action: '/admin'
+	  if (error === 1) {
+		res.render('duplicate', {
+		  layout: 'admin',
+		  name: 'Products',
+		  message: 'Product already exists',
+		  action: '/admin/products/page/1'
+		});
+	  } else {
+		res.redirect('/admin/products/page/1');
+	  }
+	});
+  });
+
+app.get('/admin', function (req, res) {
+	Dashboard.customersWithMostOrders(client, function (customersWithMostOrders) {
+		Dashboard.customersWithHighestPayment(client, function (customersWithHighestPayment) {
+			Dashboard.mostOrderedProducts(client, function (mostOrderedProducts) {
+				Dashboard.leastOrderedProducts(client, function (leastOrderedProducts) {
+					Dashboard.mostOrderedBrands(client, function (mostOrderedBrands) {
+						Dashboard.mostOrderedCategories(client, function (mostOrderedCategories) {
+							Dashboard.salesInTheLastSevenDays(client, function (salesInTheLastSevenDays) {
+								Dashboard.salesInTheLastThirtyDays(client, function (salesInTheLastThirtyDays) {
+									Dashboard.dailyOrderCount(client, function (dailyOrderCount) {
+										res.render('dashboard', {
+											customersWithMostOrders: customersWithMostOrders,
+											customersWithHighestPayment: customersWithHighestPayment,
+											mostOrderedProducts: mostOrderedProducts,
+											leastOrderedProducts: leastOrderedProducts,
+											mostOrderedBrands: mostOrderedBrands,
+											mostOrderedCategories: mostOrderedCategories,
+											salesInTheLastSevenDays: salesInTheLastSevenDays,
+											salesInTheLastThirtyDays: salesInTheLastThirtyDays,
+											dailyOrderCount: dailyOrderCount,
+											title: 'Dashboard',
+											layout: 'admin'
+										});
+									});
+								});
+							});
+						});
+					});
+				});
 			});
-		} else {
-			res.redirect('/admin');
-		}
+		});
 	});
 });
 
@@ -333,7 +421,7 @@ app.get('/products/:id/email-exists', function (req, res) {
 });
 
 // PRODUCTS CATEGORY
-app.get('/categories', (req, res) => { // category list
+app.get('/categories', (req, res) => { 
 	Category.list(client, {}, function (categories) {
 		res.render('categories', {
 			data: categories
@@ -418,14 +506,39 @@ app.post('/admin/brands', function (req, res) {
 
 
 // CUSTOMERS
-app.get('/admin/customers', (req, res) => {
-	Customer.list(client, function (customers) {
-		res.render('customers', {
-			data: customers,
-			layout: 'admin'
-		});
+app.get('/admin/customers/page/:id', (req, res) => { 
+	var page = parseInt(req.params.id);
+	var totalItems, totalPage, prevPage, nextPage, lastPage;
+	var pages = [];
+	Customer.getTotal(client, function (total) {
+	  totalItems = total[0].count;
+	  totalPage = totalItems / 10;
+	  for (var i = 1; i < totalPage + 1; i++) {
+		pages[i - 1] = i;
+		lastPage = i;
+	  };
+	  if (page === 1) {
+		prevPage = 0;
+		nextPage = 2;
+	  } else if (page > 1 && page < lastPage) {
+		prevPage = page - 1;
+		nextPage = page + 1;
+	  } else {
+		prevPage = lastPage - 1;
+		nextPage = 0;
+	  }
 	});
-});
+	Customer.list(client, {page}, function (customers) {
+	  res.render('customers', {
+		data: customers,
+		page: page,
+		pages: pages,
+		prevPage: prevPage,
+		nextPage: nextPage,
+		layout: 'admin'
+	  });
+	});
+  });
 
 app.get('/admin/customers/:id', (req, res) => {
 	Order.customerList(client, req.params.id, function (orderData) {
@@ -446,14 +559,42 @@ app.get('/admin/customers/:id', (req, res) => {
 });
 
 // ORDERS
-app.get('/admin/orders', (req, res) => {
-	Order.list(client, {}, function (orders) {
-		res.render('orders', {
-			data: orders,
-			layout: 'admin'
-		});
+app.get('/admin/orders/page/:id', (req, res) => { // ---------------------------
+	var page = parseInt(req.params.id);
+	var totalItems, totalPage, prevPage, nextPage, lastPage;
+	var pages = [];
+	Order.getTotal(client, function (total) {
+	  totalItems = total[0].count;
+	  console.log('aw');
+	  console.log(totalItems);
+	  totalPage = totalItems / 10;
+	  for (var i = 1; i < totalPage + 1; i++) {
+		pages[i - 1] = i;
+		lastPage = i;
+	  };
+	  if (page === 1) {
+		prevPage = 0;
+		nextPage = 2;
+	  } else if (page > 1 && page < lastPage) {
+		prevPage = page - 1;
+		nextPage = page + 1;
+	  } else {
+		prevPage = lastPage - 1;
+		nextPage = 0;
+	  }
 	});
-});
+  
+	Order.list(client, {page}, function (orders) {
+	  res.render('orders', {
+		data: orders,
+		page: page,
+		pages: pages,
+		prevPage: prevPage,
+		nextPage: nextPage,
+		layout: 'admin'
+	  });
+	});
+  });
 
 // MEMBERS
 app.get('/Eisen', function (req, res) {

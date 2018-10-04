@@ -12,6 +12,9 @@ var Orders = {
     ON orders.product_id = products.id
     INNER JOIN customers
     ON orders.customer_id = customers.id
+    ORDER BY id
+      LIMIT 10
+      OFFSET ((${filter.page}-1)*10)
     `;
 
     client.query(listQuery, (req, data) => {
@@ -47,6 +50,16 @@ var Orders = {
       callback(data.rows);
     });
 
+  },
+  getTotal: function (client, callback) {
+    const query = `
+      SELECT COUNT(*)
+      FROM orders
+    `;
+    client.query(query, (req, data) => {
+      console.log(data.rows);
+      callback(data.rows);
+    });
   },
 
   create: function (client, orderData, callback) {

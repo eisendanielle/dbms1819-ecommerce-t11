@@ -26,6 +26,32 @@
             </tr>
             {{/each}}
         </table>
-
     </div>
+
+    <center>
+        <h6 class="pageDirect">
+            {{#each pages}} &ensp;<a href="/admin/customers/page/{{this}}" class="pager">Page {{this}}</a>
+            {{/each}}
+        </h6>
+
+        <h6>
+            {{#if prevPage}}
+            <a href="/admin/customers/page/{{prevPage}}" class="pager">Previous Page</a>
+            {{/if}} {{#if nextPage}}
+            <a href="/admin/customers/page/{{nextPage}}" class="pager">Next Page</a>
+            {{/if}}
+        </h6>
+    </center>
 </div>
+
+<style>
+    .pageDirect {
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-size: 85%;
+    }
+
+    .pager {
+        color: rgb(61, 79, 93);
+    }
+</style>
