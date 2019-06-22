@@ -1,0 +1,45 @@
+<br>
+<h1>ADD STUDENT</h1>
+<form action="/insertstudent" method="POST" role="form" enctype="application/x-www-form-urlencoded">
+  <fieldset>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>First Name</label>
+        <input class="form-control" id="first_name" name="first_name" type="text" placeholder="First Name" required>
+      </div>
+      <div class="col">
+        <label>Last Name</label>
+        <input class="form-control" id="last_name" name="last_name" type="text" placeholder="Last Name" required>
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>Student Number</label>
+        <input class="form-control" id="student_number" name="student_number" type="text" placeholder="Student Number" required>
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>E-mail</label>
+        <input class="form-control" id="email" name="email" type="email" placeholder="E-mail" required>
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>Phone Number</label>
+        <input class="form-control" id="phone" name="phone" type="number" placeholder="Phone Number">
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>Password</label>
+        <input class="form-control" id="password" name="password" type="password" placeholder="Password" required></input>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <a class="btn btn-dark col-md-6 back" href="/admin/student">BACK</a>
+    <input class="btn btn-dark col-md-6" type="submit" value="ADD STUDENT"></input>
+  </div>
+  </fieldset>
+</form> 

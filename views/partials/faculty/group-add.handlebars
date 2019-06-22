@@ -1,0 +1,27 @@
+<br>
+<h1>ADD GROUP</h1>
+<form action="/insertgroup" method="POST" role="form">
+  <fieldset>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>Group</label>
+        <input class="form-control" id="group" name="group" type="text" placeholder="Group" required>
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>Class</label>
+          <select  name="class" class="form-control" id="class" required>
+         {{#each classes}}
+          <option value ="{{this.id}}">Batch {{this.batch}}-{{this.section}} Adviser: {{this.adviser_last_name}}</option>
+          {{/each}}
+          </select>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <a class="btn btn-dark col-md-6 back" href="/faculty/group">BACK</a>
+    <input class="btn btn-dark col-md-6" type="submit" value="ADD GROUP"></input>
+  </div>
+  </fieldset>
+</form> 

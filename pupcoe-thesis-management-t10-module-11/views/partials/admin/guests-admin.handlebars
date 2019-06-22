@@ -1,0 +1,138 @@
+<style type="text/css">
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,300");
+
+body {
+  color: #2c3e50;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 300;
+}
+
+.pagination-container {
+  margin: 100px auto;
+  text-align: center;
+}
+
+.pagination {
+  position: relative;
+}
+
+.pagination a {
+  position: relative;
+  display: inline-block;
+  color: #2c3e50;
+  text-decoration: none;
+  font-size: 1.2rem;
+  padding: 8px 16px 10px;
+}
+
+.pagination a:before {
+  z-index: -1;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  content: "";
+  top: 0;
+  left: 0;
+  background-color: #2c3e50;
+  border-radius: 24px;
+  transform: scale(0);
+  transition: all 0.2s;
+}
+
+.pagination a:hover,
+.pagination a .pagination-active {
+  color: #fff;
+}
+
+.pagination a:hover:before,
+.pagination a .pagination-active:before {
+  transform: scale(1);
+}
+
+.pagination .pagination-active {
+  color: #fff;
+}
+
+.pagination .pagination-active:before {
+  transform: scale(1);
+}
+
+.pagination-newer {
+  margin-right: 50px;
+}
+
+.pagination-older {
+  margin-left: 50px;
+}
+</style>
+
+<br>
+<h1>List of Customers</h1>
+<div style="padding-left: 50px; padding-right:76px;">
+  <div class="tbl-header">
+    <table cellpadding="0" cellspacing="0" border="0">
+      <thead>
+        <tr>
+          <th>Customer Name</th>
+          <th>Customer E-mail</th>
+          <th>Customer Address</th>
+          <th>Customer Orders</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="tbl-content">
+    <table cellpadding="0" cellspacing="0" border="0">
+      <tbody>
+        {{#each customers}}
+        <tr>
+          <td>{{this.first_name}} {{this.last_name}}</td>
+          <td>{{this.email}}</td>
+          <td>{{this.street}} {{this.municipality}} {{this.province}} {{this.zipcode}}</td>
+          <td><a href="/customer/{{id}}" class="btn btn-dark knowmore" style="text-transform: uppercase;">SEE ORDERS</a></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{{!-- <div class="pagination pagination-centered">
+  <ul>
+    {{#paginate pagination type="first"}}
+      <li {{#if disabled}}class="disabled"{{/if}}><a href="?p={{n}}">First</a></li>
+    {{/paginate}}
+    {{#paginate pagination type="previous"}}
+      <li {{#if disabled}}class="disabled"{{/if}}><a href="?p={{n}}">Prev</a></li>
+    {{/paginate}}
+    {{#paginate pagination type="middle" limit="{{limit}}" offset="{{offset}}"}}
+      <li {{#if active}}class="active"{{/if}}><a href="?p={{n}}">{{n}}</a></li>
+    {{/paginate}}
+    {{#paginate pagination type="next"}}
+      <li {{#if disabled}}class="disabled"{{/if}}><a href="?p={{n}}">Next</a></li>
+    {{/paginate}}
+    {{#paginate pagination type="last"}}
+      <li {{#if disabled}}class="disabled"{{/if}}><a href="?p={{n}}">Last</a></li>
+    {{/paginate}}
+  </ul>
+</div> --}}
+
+<script type="text/javascript">
+$(window).on("load resize ", function() {
+  var scrollWidth = $('.tbl-content').width() - $('.tbl-content table').width();
+  $('.tbl-header').css({'padding-right':scrollWidth});
+}).resize();
+</script>
+
+<script type="text/javascript">
+$('.pagination-inner a').on('click', function() {
+    $(this).siblings().removeClass('pagination-active');
+    $(this).addClass('pagination-active');
+});
+</script>

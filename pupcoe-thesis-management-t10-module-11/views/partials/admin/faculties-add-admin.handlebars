@@ -1,0 +1,52 @@
+<style type="text/css">
+input[type=checkbox]
+{
+  -webkit-appearance:checkbox;
+}
+</style>
+
+<br>
+<h1>ADD FACULTY</h1>
+<form action="/insertfaculty" method="POST" role="form">
+  <fieldset>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>First Name</label>
+        <input class="form-control" id="first_name" name="first_name" type="text" placeholder="First Name" required>
+      </div>
+      <div class="col">
+        <label>Last Name</label>
+        <input class="form-control" id="last_name" name="last_name" type="text" placeholder="Last Name" required>
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>E-mail</label>
+        <input class="form-control" id="email" name="email" type="email" placeholder="E-mail">
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>Phone Number</label>
+        <input class="form-control" id="phone" name="phone" type="number" placeholder="Phone Number">
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>Password</label>
+        <input class="form-control" id="password" name="password" type="password" placeholder="Password"></input>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col">
+        <label>Make Admin</label>
+        <input class="form-control" id="admin" name="admin" type="checkbox"></input>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <a class="btn btn-dark col-md-6 back" href="/admin/faculties">BACK</a>
+    <input class="btn btn-dark col-md-6" type="submit" value="ADD FACULTY"></input>
+  </div>
+  </fieldset>
+</form>

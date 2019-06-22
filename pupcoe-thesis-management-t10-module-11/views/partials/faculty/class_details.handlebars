@@ -1,0 +1,28 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h3">Batch {{classData.batch}}-{{classData.section}} Students</h1>
+</div>
+<div>
+  <h1 class="h4">Adviser: {{classData.adviser_first_name}} {{classData.adviser_last_name}}</h1>
+  <table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Student Number</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Phone</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each classStudents}}
+    <tr>
+      <th scope="row">{{this.student_number}}</th>
+      <td>{{this.first_name}} {{this.last_name}}</td>
+      <td>{{this.email}}</td>
+      <td>{{this.phone}}</td>
+      <td><a href='/faculty/student/{{this.id}}'>view</a></td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>

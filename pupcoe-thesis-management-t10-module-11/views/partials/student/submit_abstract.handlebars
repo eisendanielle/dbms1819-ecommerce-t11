@@ -1,0 +1,34 @@
+<br>
+<h1>SUBMIT THESIS ABSTRACT</h1>
+<form action="/submit" method="POST" role="form" enctype="application/x-www-form-urlencoded">
+  <fieldset>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>Group</label>
+          <select  name="group" class="form-control" id="group" required>
+         {{#each data}}
+          <option value ="{{this.id}}">{{this.groupname}}</option>
+          {{/each}}
+          </select>
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>Thesis Title</label>
+        <input class="form-control" id="thesistitle" name="thesistitle" type="text" placeholder="Thesis Title" required>
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>Abstract</label>
+        <textarea class="form-control" id="abstract" name="abstract" type="text" placeholder="Abstract" required> </textarea>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+    <input class="btn btn-dark col-md-12" type="submit" value="SUBMIT"></input>
+          <a class="btn btn-dark col-md-12 back" href="/status">SEE PROPOSAL STATUSES</a>
+                    <a class="btn btn-dark col-md-12" href="/student/choose">CHOOSE THESIS FOR DEFENSE</a>
+  </div>
+  </fieldset>
+</form> 

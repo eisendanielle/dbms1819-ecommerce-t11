@@ -1,0 +1,49 @@
+<br>
+<h1>EDIT PROFILE</h1>
+<form action="/updatestudent" id="addproduct-form" method="POST" role="form">
+  <fieldset>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label for="name">First Name</label>
+        <input class="form-control" id="name" name="name" type="text" placeholder="First Name" required>
+      </div>
+      <div class="col">
+        <label for="price">Last Name</label>
+        <input class="form-control" id="price" name="price" type="text" placeholder="Last Name" required>
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>Student Number</label>
+        <input class="form-control" id="student_number" name="student_number" type="number" placeholder="Student Number">
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>E-mail</label>
+        <input class="form-control" id="email" name="email" type="email" placeholder="E-mail">
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label>Phone Number</label>
+        <input class="form-control" id="phone" name="phone" type="number" placeholder="Phone Number">
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 14px;">
+      <div class="col">
+        <label for="name">Password</label>
+        <input class="form-control" id="tagline" name="tagline" type="password" placeholder="Password"></input>
+      </div>
+{{!--       <div class="col">
+        <label for="price">Confirm Password</label>
+        <input class="form-control" id="description" name="description" type="password" placeholder="Confirm Password"></input>
+      </div> --}}
+    </div>
+    <br>
+    <div class="row">
+      <a class="btn btn-dark col-md-6 back" href="/admin/faculties">BACK</a>
+    <input class="btn btn-dark col-md-6" type="submit" value="UPDATE PROFILE"></input>
+  </div>
+  </fieldset>
+</form> 

@@ -32,26 +32,26 @@
   <style type="text/css">
   @import url('https://fonts.googleapis.com/css?family=Gothic+A1|Kaushan+Script|Libre+Baskerville|Lobster');
   .navbar-brand  span{
-    color: white;
+    color: gray;
     font-size:25px;font-weight:700;letter-spacing:0.1em;
     font-family: 'Kaushan Script','Helvetica Neue',Helvetica,Arial,cursive;
   }
   .navbar-brand {
-    color: lightgray !important;
+    color: black !important;
     font-size:25px;
     font-family: 'Kaushan Script','Helvetica Neue',Helvetica,Arial,cursive;
     font-weight:700;
     letter-spacing:0.1em;
   }
   .navbar-brand:hover{
-    background-color: transparent !important;
+    background-color: white;
   }
   .navbar-nav .nav-item .nav-link{
     padding: 1.1em 1em!important;
     font-size: 120%;
     font-weight: 500;
     letter-spacing: 1px;
-    color: gainsboro;
+    color: black;
     font-family: 'Gothic A1', sans-serif;
   }
   .navbar-nav .nav-item .nav-link:hover{
@@ -107,10 +107,10 @@
   });
   </script>
 
-  <nav style="background-color: black !important;" class="navbar navbar-expand-md fixed-top" id="banner">
+  <nav class="navbar navbar-expand-md fixed-top" id="banner">
     <div class="container">
       <!-- Brand -->
-      <a class="navbar-brand" href="/"><span>Admin</span> Dashboard</a>
+      <a class="navbar-brand" href="/"><span>Thesis</span> Management</a>
 
       <!-- Toggler/collapsibe Button -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -121,26 +121,20 @@
       <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/admin/faculties">Faculty</a>
+            <a class="nav-link" href="/student/group">Group</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/admin/committee">Committee</a>
+            <a class="nav-link" href="/student/thesis">Thesis</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/admin/students">Students</a>
+            <a class="nav-link" href="/student/calendar">Calendar</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/admin/class">Class</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/admin">Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/faculty">Home</a>
+            <a class="nav-link" href="/student">Profile</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/logout">Log Out</a>
-          </li>
+          </li> 
         </ul>
       </div>
     </div>

@@ -1,0 +1,49 @@
+<div style="margin-top: 50px;">
+<center><h2>PROFILE</h2></center>
+<form method="POST" action="/updateadminprofile">
+
+{{!--   {{#each user}} --}}
+
+  <div style="width: 1000px;">
+    <div class="form-row">
+      <div class="col">
+        <label class="label" for="input">
+          FIRST NAME
+        </label>
+        <input class="input" type="text" id="first_name" name="first_name" value="{{this.first_name}}">
+      </div>
+      <div class="col">
+        <label class="label" for="input">
+          LAST NAME
+        </label>
+        <input class="input" type="text" id="last_name" name="last_name" value="{{this.last_name}}">
+      </div>
+    </div>
+
+
+      <div class="form-row">
+        <div class="col">
+          <label class="label" for="input">
+            EMAIL
+          </label>  
+          <input class="input e" type="email" id="email" name="email" value="{{this.email}}">
+        </div>
+        <div class="col">
+          <label class="label" for="input">
+            PASSWORD
+          </label> 
+          <input class="input e" type="password" id="password" name="password" value="{{this.password}}">
+        </div>
+      </div>
+
+<br><br>
+
+          {{!-- {{/each}} --}}
+
+
+        <center><input class="btn btn-dark col-md-12" type="submit" value="UPDATE PROFILE"></input></center>
+
+    </div>
+    </form>
+
+</div>

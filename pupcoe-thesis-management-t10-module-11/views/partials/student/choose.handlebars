@@ -1,0 +1,140 @@
+<style type="text/css">
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,300");
+
+body {
+  color: #2c3e50;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+}
+
+.pagination-container {
+  margin: 100px auto;
+  text-align: center;
+}
+
+.pagination {
+  position: relative;
+}
+
+.pagination a {
+  position: relative;
+  display: inline-block;
+  color: #2c3e50;
+  text-decoration: none;
+  font-size: 1.2rem;
+  padding: 8px 16px 10px;
+}
+
+.pagination a:before {
+  z-index: -1;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  content: "";
+  top: 0;
+  left: 0;
+  background-color: #2c3e50;
+  border-radius: 24px;
+  transform: scale(0);
+  transition: all 0.2s;
+}
+
+.pagination a:hover,
+.pagination a .pagination-active {
+  color: #fff;
+}
+
+.pagination a:hover:before,
+.pagination a .pagination-active:before {
+  transform: scale(1);
+}
+
+.pagination .pagination-active {
+  color: #fff;
+}
+
+.pagination .pagination-active:before {
+  transform: scale(1);
+}
+
+.pagination-newer {
+  margin-right: 50px;
+}
+
+.pagination-older {
+  margin-left: 50px;
+}
+</style>
+<h1>Choose Thesis For Defense</h1>
+<div style="padding-left: 50px; padding-right:76px;">
+  <div class="tbl-header">
+    <table cellpadding="0" cellspacing="0" border="0">
+      <thead>
+        <tr>
+          <th>Group</th>
+          <th>Title</th>
+          <th>Abstract</th>
+          <th>Status</th>
+          <th>Use This</th>
+        </tr>
+      </thead>
+    </table>
+  </div> 
+  <div class="tbl-content">
+    <table cellpadding="0" cellspacing="0" border="0">
+      <tbody>
+        {{#each thesis}}
+        <tr>
+          <td>{{this.group_id}}</td>
+          <td>{{this.thesis_title}}</td>
+          <td>
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#abstract">See Abstract</button>
+          </td>
+          <td>{{this.stage}}</td>
+          <td>
+            <form action="/proposal/use_defense" method="post">
+                    <input type="hidden" name="thesis_id" value="{{this.id}}">
+                    <div class="form-group">
+                      <td><input type="submit" name="acceptThis" class="btn btn-sm btn-outline-secondary" value="Use This"></td>
+                    </div>
+                  </form>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <br>
+</div>
+
+<script type="text/javascript">
+$(window).on("load resize ", function() {
+  var scrollWidth = $('.tbl-content').width() - $('.tbl-content table').width();
+  $('.tbl-header').css({'padding-right':scrollWidth});
+}).resize();
+</script>
+
+<script type="text/javascript">
+$('.pagination-inner a').on('click', function() {
+    $(this).siblings().removeClass('pagination-active');
+    $(this).addClass('pagination-active');
+});
+</script>
+
+{{#each thesis}}
+<div class="modal fade" id="abstract" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Abstract</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <p>{{this.abstract}}</p>
+    </div>
+  </div>
+</div>
+{{/each}}
+
+

@@ -1,5 +1,3 @@
-{{!-- NON-LOGGED NAVBAR!!!!!!!!!!!!!!!! --}}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,116 +29,12 @@
 	<title>A&P | {{title}}</title>
 </head> 
 <body>
-	<style type="text/css">
-	@import url('https://fonts.googleapis.com/css?family=Gothic+A1|Kaushan+Script|Libre+Baskerville|Lobster');
-	.navbar-brand  span{
-		color: gray;
-		font-size:25px;font-weight:700;letter-spacing:0.1em;
-		font-family: 'Kaushan Script','Helvetica Neue',Helvetica,Arial,cursive;
-	}
-	.navbar-brand {
-		color: black !important;
-		font-size:25px;
-		font-family: 'Kaushan Script','Helvetica Neue',Helvetica,Arial,cursive;
-		font-weight:700;
-		letter-spacing:0.1em;
-	}
-	.navbar-brand:hover{
-		background-color: white;
-	}
-	.navbar-nav .nav-item .nav-link{
-		padding: 1.1em 1em!important;
-		font-size: 120%;
-		font-weight: 500;
-		letter-spacing: 1px;
-		color: black;
-		font-family: 'Gothic A1', sans-serif;
-	}
-	.navbar-nav .nav-item .nav-link:hover{
-		color:#373C42; background-color: white;
-	}
-	.navbar-expand-md .navbar-nav .dropdown-menu{
-		border-top:3px solid #373C42;
-	}
-	.dropdown-item:hover{
-		background-color:#373C42;
-		color:#fff;
-	}
-	nav{
-		-webkit-transition: padding-top .3s,padding-bottom .3s;
-		-moz-transition: padding-top .3s,padding-bottom .3s;
-		transition: padding-top .3s,padding-bottom .3s;
-		border: none;
-	}
-
-
-	/* mobile view */
-	@media (max-width:500px)
-	{
-		.navbar-nav{
-			background-color:#000;
-			border-top:3px solid #fed136;
-			color:black;
-			z-index:1;
-			margin-top:5px;
-		}
-		.navbar-nav .nav-item .nav-link{
-			padding: 0.7em 1em!important;
-			font-size: 100%;
-			font-weight: 500;
-		}
-
-	}
-	.shrink {
-		transition: background-color 200ms linear;
-		background-color: white;
-		border-bottom: 1px solid gainsboro;
-
-	}
-	</style>
-	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-	<script type="text/javascript">
-
-	$(function() {
-		$(document).scroll(function() {
-			var $nav = $(".navbar");
-			$nav.toggleClass('shrink', $(this).scrollTop() > $nav.height());
-		});
-	});
-	</script>
-
-	<nav class="navbar navbar-expand-md fixed-top" id="banner">
-		<div class="container">
-			<!-- Brand -->
-			<a class="navbar-brand" href="/"><span>Thesis</span> Management</a>
-
-			<!-- Toggler/collapsibe Button -->
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-
-			<!-- Navbar links -->
-			<div class="collapse navbar-collapse" id="collapsibleNavbar">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<a class="nav-link" href="/thesis">Thesis List</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/">Log In/Sign Up</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-
-	<br>
-	<br>
-	<br>
+	{{>email/header}}
 	{{{body}}}
-
+	{{>email/footer}}
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
-</html>
+</html>  

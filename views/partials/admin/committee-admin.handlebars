@@ -1,0 +1,61 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h3">Committee</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group mr-2">
+      <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#add-students">Add Committee</button>
+    </div>
+
+  </div>
+</div>
+<div>
+  <table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Phone</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each committee}}
+    <tr>
+      <td>{{this.first_name}} {{this.last_name}}</td>
+      <td>{{this.email}}</td>
+      <td>{{this.phone}}</td>
+      <td><a href='/admin/faculty/{{this.id}}'>view</a></td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>
+
+
+<div class="modal fade" id="add-students" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Select Students</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/add_committee" method="POST" role="form">
+      <div class="modal-body">
+          <select id="facultylist" name="facultylist" class="form-control">
+              {{#each faculty}}
+                <option value='{{this.id}}'>
+                  <div><em>{{this.id}} {{this.first_name}} {{this.last_name}}</em></div>
+                  <div>{{this.email}}</div>
+                </option>
+              {{/each}}
+          </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <input class="btn btn-primary" type="submit" value="SAVE CHANGES"></input>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
